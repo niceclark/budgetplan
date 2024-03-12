@@ -1,1 +1,2 @@
-# <center>Budget plan</center>
+<h1 align="center">Budget plan</h1>
+
