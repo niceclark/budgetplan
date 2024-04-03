@@ -11,21 +11,26 @@ COPY ./backend/ /backend/
 RUN go build -o budgetplan .
 
 
-FROM node:21.6.1 as NODE_BUILD
-WORKDIR /frontend
-ADD ./frontend/ /frontend/
-RUN yarn install && yarn build
+#FROM node:21.6.1 as NODE_BUILD
+FROM node:21.6.1
+WORKDIR /app/frontend
+ADD ./frontend/ /app/frontend/
+
+ENV NODE_ENV production
 
 
-FROM ubuntu:22.04
-LABEL authors="niceclark"
+RUN yarn build && yarn install
+
+
+#FROM ubuntu:22.04
+#LABEL authors="niceclark"
 
 ENV TZ=Asia/Shanghai
 
-WORKDIR /app
+#WORKDIR /app
 
-COPY --from=GO_BUILD /backend/budgetplan ./backend/
-COPY --from=NODE_BUILD /frontend/ ./frontend/
+COPY --from=GO_BUILD /backend/budgetplan /app/backend/
+#COPY --from=NODE_BUILD /frontend/ ./frontend/
 
 
 EXPOSE 3000
